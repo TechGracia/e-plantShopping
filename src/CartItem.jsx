@@ -4,38 +4,38 @@ import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
+  const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
-    return cart.reduce((total, item) => total + (item.cost || 0) * (item.quantity || 0), 0).toFixed(2);
+    return cartItems.reduce((total, item) => total + item.cost * item.quantity, 0).toFixed(2);
   };
 
   const handleContinueShopping = (e) => {
     e.preventDefault();
-    onContinueShopping();
+    onContinueShopping(); // Call the function passed from the parent component
   };
 
   const handleIncrement = (item) => {
-    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+    dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 })); // Dispatch update quantity with item's id
   };
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
-      dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+      dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 })); // Dispatch update quantity with item's id
     } else {
-      dispatch(removeItem({ name: item.name }));
+      dispatch(removeItem({ id: item.id })); // Remove item if quantity goes to 0
     }
   };
 
   const handleRemove = (item) => {
-    dispatch(removeItem({ name: item.name }));
+    dispatch(removeItem({ id: item.id })); // Remove item by id
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    return (item.cost * (item.quantity || 0)).toFixed(2); // Calculate subtotal for this item
+    return (item.cost * item.quantity).toFixed(2); // Calculate subtotal for this item
   };
 
   const handleCheckoutShopping = () => {
@@ -44,14 +44,14 @@ const CartItem = ({ onContinueShopping }) => {
 
   return (
     <div className="cart-container">
-      {cart.length === 0 ? (
+      {cartItems.length === 0 ? (
         <h2 style={{ color: 'black' }}>Your cart is empty.</h2>
       ) : (
         <>
           <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
           <div>
-            {cart.map(item => (
-              <div className="cart-item" key={item.name}>
+            {cartItems.map(item => (
+              <div className="cart-item" key={item.id}> {/* Use unique ID for key */}
                 <img className="cart-item-image" src={item.image} alt={item.name} />
                 <div className="cart-item-details">
                   <div className="cart-item-name">{item.name}</div>

@@ -8,7 +8,7 @@ function ProductList() {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false);
     const [addedToCart, setAddedToCart] = useState({}); // State to track products added to cart
-
+    const [quantities, setQuantities] = useState({}); // Track quantity for each plant
     const dispatch = useDispatch();
     const totalQuantity = useSelector(selectTotalQuantity); // Access total quantity from the cart
     const plantsArray = [
@@ -247,10 +247,16 @@ const handleContinueShopping = () => {
     setShowCart(false); // Hide cart
 };
 
-const handleAddToCart = (plant) => { // Updated to receive plant object
-    dispatch(addItem({ ...plant, quantity: 1 })); // Dispatch addItem action
+const handleAddToCart = (plant) => { 
+    const quantity = quantities[plant.name] || 1; // Get quantity, default to 1
+    dispatch(addItem({ ...plant, quantity })); // Dispatch addItem action with quantity
+    setQuantities({ ...quantities, [plant.name]: 1 }); // Reset quantity for the plant
 };
 
+const handleQuantityChange = (plantName, value) => {
+    const quantity = Math.max(1, value); // Ensure quantity is at least 1
+    setQuantities({ ...quantities, [plantName]: quantity }); // Update quantity for the plant
+};
 const handleCheckoutShopping = (e) => {
     alert('Functionality to be added for future reference');
 };
@@ -300,9 +306,15 @@ const handlePlantsClick = (e) => {
                                         <div className="product-title">{plant.name}</div>
                                         <div className="product-description">{plant.description}</div>
                                         <div className="product-cost">{plant.cost}</div>
+                                        <input
+                                            type="number"
+                                            value={quantities[plant.name] || 1} // Use quantity state or default to 1
+                                            min="1"
+                                            onChange={(e) => handleQuantityChange(plant.name, parseInt(e.target.value))}
+                                        />
                                         <button
                                             className="product-button"
-                                            onClick={() => handleAddToCart(plant)} // Calls the updated function
+                                            onClick={() => handleAddToCart(plant)}
                                         >
                                             Add to Cart
                                         </button>
@@ -315,7 +327,7 @@ const handlePlantsClick = (e) => {
             ) : (
                 <CartItem 
                     onContinueShopping={handleContinueShopping} 
-                    onCheckout={handleCheckoutShopping}
+                    onCheckout={() => alert('Functionality to be added for future reference')}
                 />
             )}
         </div>
