@@ -6,32 +6,26 @@ export const CartSlice = createSlice({
         items: [], // Initialize items as an empty array
     },
     reducers: {
+        // Add item to the cart
         addItem: (state, action) => {
-            const item = action.payload;
-
-            // Check if the item already exists in the cart
-            const existingItem = state.items.find((i) => i.name === item.name);
+            const { name, image, cost } = action.payload;
+            const existingItem = state.items.find(item => item.name === name);
             if (existingItem) {
-                // If it exists, increase its quantity
-                existingItem.quantity += 1;
+                existingItem.quantity++; // Increment quantity if the item already exists
             } else {
-                // If it doesn't exist, add it with a quantity of 1
-                state.items.push({ ...item, quantity: 1 });
+                state.items.push({ name, image, cost, quantity: 1 }); // Add new item with quantity 1
             }
         },
+        // Remove item from the cart
         removeItem: (state, action) => {
-            const itemName = action.payload;
-
-            // Filter out the item that needs to be removed
-            state.items = state.items.filter((item) => item.name !== itemName);
+            state.items = state.items.filter(item => item.name !== action.payload); // Remove item by name
         },
+        // Update quantity of a specific item in the cart
         updateQuantity: (state, action) => {
-            const { itemName, quantity } = action.payload;
-
-            // Find the item and update its quantity
-            const existingItem = state.items.find((item) => item.name === itemName);
-            if (existingItem) {
-                existingItem.quantity = quantity;
+            const { name, quantity } = action.payload; // Destructure name and quantity from the payload
+            const itemToUpdate = state.items.find(item => item.name === name);
+            if (itemToUpdate) {
+                itemToUpdate.quantity = quantity; // Update quantity if item exists
             }
         },
     },

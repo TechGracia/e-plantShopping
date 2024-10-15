@@ -248,10 +248,10 @@ const handleContinueShopping = (e) => {
 };
 
 const handleAddToCart = (product) => {
-    dispatch(addItem(product)); // Dispatch the product to the cart
+    dispatch(addItem(product)); // Dispatch the addItem action with the product details
     setAddedToCart((prevState) => ({
         ...prevState,
-        [product.name]: true, // Mark the product as added to cart
+        [product.name]: true, // Indicate that the product has been added to the cart
     }));
 };
   
@@ -297,12 +297,11 @@ const handleAddToCart = (product) => {
                                         <div className="product-description">{plant.description}</div>
                                         <div className="product-cost">{plant.cost}</div>
                                         <button
-                                            className="product-button"
-                                            onClick={() => handleAddToCart(plant)}
-                                            disabled={addedToCart[plant.name]}
-                                        >
-                                            {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
-                                        </button>
+                                    className="product-button"
+                                    onClick={() => handleAddToCart(plant)}
+                                >
+                                    {addedToCart[plant.name] ? "Added" : "Add to Cart"}
+                                </button>
                                     </div>
                                 ))}
                             </div>
