@@ -37,4 +37,4 @@ export const selectTotalQuantity = (state) => {
 
 // Exporting actions and the reducer
 export const { addItem, removeItem, updateQuantity } = cartSlice.actions;
-export default CartSlice.reducer;
+export default cartSlice.reducer;
