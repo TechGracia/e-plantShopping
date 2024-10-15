@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectTotalQuantity } from './CartSlice'; // Ensure to import addItem from CartSlice
+import { addItem, selectTotalQuantity } from './CartSlice';
 import './ProductList.css';
 import CartItem from './CartItem';
 
@@ -247,8 +247,8 @@ const handleContinueShopping = () => {
     setShowCart(false); // Hide cart
 };
 
-const handleAddToCart = (product) => {
-    dispatch(addItem(product)); 
+const handleAddToCart = (plant) => { // Updated to receive plant object
+    dispatch(addItem({ ...plant, quantity: 1 })); // Dispatch addItem action
 };
 
 const handleCheckoutShopping = (e) => {
@@ -302,7 +302,7 @@ const handlePlantsClick = (e) => {
                                         <div className="product-cost">{plant.cost}</div>
                                         <button
                                             className="product-button"
-                                            onClick={() => handleAddToCart(plant)}
+                                            onClick={() => handleAddToCart(plant)} // Calls the updated function
                                         >
                                             Add to Cart
                                         </button>
@@ -315,7 +315,7 @@ const handlePlantsClick = (e) => {
             ) : (
                 <CartItem 
                     onContinueShopping={handleContinueShopping} 
-                    onCheckout={handleCheckoutShopping} // Passing to CartItem for checkout
+                    onCheckout={handleCheckoutShopping}
                 />
             )}
         </div>
