@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addItem } from './CartSlice'; // Ensure to import addItem from CartSlice
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, selectTotalQuantity } from './CartSlice'; // Ensure to import addItem from CartSlice
 import './ProductList.css';
 import CartItem from './CartItem';
 
 function ProductList() {
-    const [showCart, setShowCart] = useState(false); 
+    const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false);
     const [addedToCart, setAddedToCart] = useState({}); // State to track products added to cart
 
     const dispatch = useDispatch();
+    const totalQuantity = useSelector(selectTotalQuantity); // Access total quantity from the cart
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -242,19 +243,21 @@ function ProductList() {
     setShowCart(true); // Show cart
 };
 
-const handleContinueShopping = (e) => {
-    e.preventDefault();
+const handleContinueShopping = () => {
     setShowCart(false); // Hide cart
 };
 
 const handleAddToCart = (product) => {
-    dispatch(addItem(product)); // Dispatch the addItem action with the product details
+    dispatch(addItem(product)); 
     setAddedToCart((prevState) => ({
         ...prevState,
-        [product.name]: true, // Indicate that the product has been added to the cart
+        [product.name]: true,
     }));
 };
-  
+
+const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
+};
     return (
         <div>
              <div className="navbar" style={styleObj}>
@@ -297,11 +300,11 @@ const handleAddToCart = (product) => {
                                         <div className="product-description">{plant.description}</div>
                                         <div className="product-cost">{plant.cost}</div>
                                         <button
-                                    className="product-button"
-                                    onClick={() => handleAddToCart(plant)}
-                                >
-                                    {addedToCart[plant.name] ? "Added" : "Add to Cart"}
-                                </button>
+                                            className="product-button"
+                                            onClick={() => handleAddToCart(plant)}
+                                        >
+                                            {addedToCart[plant.name] ? "Added" : "Add to Cart"}
+                                        </button>
                                     </div>
                                 ))}
                             </div>
@@ -309,7 +312,10 @@ const handleAddToCart = (product) => {
                     ))}
                 </div>
             ) : (
-                <CartItem onContinueShopping={() => setShowCart(false)} />
+                <CartItem 
+                    onContinueShopping={handleContinueShopping} 
+                    onCheckout={handleCheckoutShopping} // Passing to CartItem for checkout
+                />
             )}
         </div>
     );
