@@ -19,7 +19,6 @@ const cartSlice = createSlice({
                 item.quantity = quantity; // Update the item's quantity
             }
         },
-        // Other reducers can be added here...
     },
 });
 
