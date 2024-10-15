@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const CartSlice = createSlice({
+export const selectTotalQuantity = (state) => {
+    return state.cart.items.reduce((total, item) => total + item.quantity, 0);
+};
+
+const CartSlice = createSlice({
     name: 'cart',
     initialState: {
         items: [], // Initialize items as an empty array
-        totalQuantity: 0, // Initialize total quantity
+        // totalQuantity: 0, // You can remove this if you are calculating it on the fly
     },
     reducers: {
         // Add item to the cart
@@ -16,13 +20,15 @@ export const CartSlice = createSlice({
             } else {
                 state.items.push({ name, image, cost, quantity: 1 }); // Add new item with quantity 1
             }
-            state.totalQuantity++; // Increment total quantity
+            // Optionally update totalQuantity if you keep it in state
+            // state.totalQuantity++; 
         },
         // Remove item from the cart
         removeItem: (state, action) => {
             const itemToRemove = state.items.find(item => item.name === action.payload);
             if (itemToRemove) {
-                state.totalQuantity -= itemToRemove.quantity; // Decrease total quantity by the quantity of the removed item
+                // Optionally update totalQuantity if you keep it in state
+                // state.totalQuantity -= itemToRemove.quantity; 
             }
             state.items = state.items.filter(item => item.name !== action.payload); // Remove item by name
         },
@@ -31,7 +37,8 @@ export const CartSlice = createSlice({
             const { name, quantity } = action.payload; // Destructure name and quantity from the payload
             const itemToUpdate = state.items.find(item => item.name === name);
             if (itemToUpdate) {
-                state.totalQuantity += quantity - itemToUpdate.quantity; // Update total quantity
+                // Optionally update totalQuantity if you keep it in state
+                // state.totalQuantity += quantity - itemToUpdate.quantity; // Update total quantity
                 itemToUpdate.quantity = quantity; // Update quantity if item exists
             }
         },
@@ -40,6 +47,9 @@ export const CartSlice = createSlice({
 
 // Export the actions to be used in the component
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
+
+// Export the selector
+export { selectTotalQuantity };
 
 // Export the reducer to be used in the store
 export default CartSlice.reducer;

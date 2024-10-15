@@ -249,14 +249,15 @@ const handleContinueShopping = () => {
 
 const handleAddToCart = (product) => {
     dispatch(addItem(product)); 
-    setAddedToCart((prevState) => ({
-        ...prevState,
-        [product.name]: true,
-    }));
 };
 
 const handleCheckoutShopping = (e) => {
     alert('Functionality to be added for future reference');
+};
+
+const handlePlantsClick = (e) => {
+    e.preventDefault();
+    // Logic to display plants can be added here if needed
 };
     return (
         <div>
@@ -303,7 +304,7 @@ const handleCheckoutShopping = (e) => {
                                             className="product-button"
                                             onClick={() => handleAddToCart(plant)}
                                         >
-                                            {addedToCart[plant.name] ? "Added" : "Add to Cart"}
+                                            Add to Cart
                                         </button>
                                     </div>
                                 ))}
