@@ -249,7 +249,7 @@ const handleContinueShopping = () => {
 
 const handleAddToCart = (plant) => { 
     const quantity = quantities[plant.name] || 1; // Get quantity, default to 1
-    dispatch(addItem({ ...plant, quantity })); // Dispatch addItem action with quantity
+    dispatch(addItem(item));
     setQuantities({ ...quantities, [plant.name]: 1 }); // Reset quantity for the plant
 };
 
